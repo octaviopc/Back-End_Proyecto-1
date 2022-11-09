@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Back_End.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Back_End.Controllers
@@ -10,31 +11,29 @@ namespace Back_End.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private static List<User> users = new List<User>
+        private readonly IUserService _userService;
+        public UserController(IUserService userService)
         {
-            new User {UserId=0, Name="Tavo"},
-            new User {UserId=1, Name="Daniel"}
-
+            _userService = userService;
             
-        };
+        }
 
         [HttpGet("GetAll")]
         public ActionResult<List<User>> Get()
         {
-            return Ok(users);
+            return Ok(_userService.GetAllUsers());
         }
 
         [HttpGet("{id}")]
         public ActionResult<List<User>> GetSingle(int id)
         {
-            return Ok(users.FirstOrDefault(c=>c.UserId ==id));
+            return Ok(_userService.GetUserById(id));
         }
         
         [HttpPost]
-        public ActionResult<List<User>> AddCharacter(User newUsers)
+        public ActionResult<List<User>> AddUser(User newUsers)
         {
-            users.Add(newUsers);
-            return Ok(users);
+            return Ok(_userService.AddUser);
         }
     }
 }
