@@ -11,8 +11,8 @@ namespace Back_End.Services.UserService
     {
         private static List<User> users = new List<User>
         {
-            new User {UserId=0, Name="Tavo"},
-            new User {UserId=1, Name="Daniel"}            
+            new User {UserId=1, Name="Tavo"},
+            new User {UserId=2, Name="Daniel"}            
         };
         private readonly IMapper _mapper;
 
