@@ -13,20 +13,26 @@ namespace Back_End.Services.UserService
             new User {UserId=1, Name="Daniel"}            
         };
 
-        public List<User> AddUser(User newUsers)
+        public async Task<ServiceResponse<List<User>>> AddUser(User newUsers)
         {
+            var serviceResponse = new ServiceResponse<List<User>>();
             users.Add(newUsers);
-            return users;
+            serviceResponse.Data= users;
+            return serviceResponse;
         }
 
-        public List<User> GetAllUsers()
+        public async Task<ServiceResponse<List<User>>> GetAllUsers()
         {
-            return users;
+
+            return new ServiceResponse<List<User>>{Data = users};
         }
 
-        public User GetUserById(int id)
+        public async Task<ServiceResponse<User>> GetUserById(int id)
         {
-            return users.FirstOrDefault(c=>c.UserId ==id);
+            var serviceResponse = new ServiceResponse<User>();
+            var user = users.FirstOrDefault(c=>c.UserId ==id);
+            serviceResponse.Data = user;
+            return serviceResponse;
         }
     }
 }

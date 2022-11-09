@@ -19,21 +19,21 @@ namespace Back_End.Controllers
         }
 
         [HttpGet("GetAll")]
-        public ActionResult<List<User>> Get()
+        public async Task<ActionResult<ServiceResponse<List<User>>>> Get()
         {
-            return Ok(_userService.GetAllUsers());
+            return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<List<User>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<User>>> GetSingle(int id)
         {
-            return Ok(_userService.GetUserById(id));
+            return Ok(await _userService.GetUserById(id));
         }
         
         [HttpPost]
-        public ActionResult<List<User>> AddUser(User newUsers)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User newUser)
         {
-            return Ok(_userService.AddUser);
+            return Ok(await _userService.AddUser(newUser));
         }
     }
 }

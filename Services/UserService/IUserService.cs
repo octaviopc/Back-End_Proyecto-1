@@ -7,9 +7,9 @@ namespace Back_End.Services.UserService
 {
     public interface IUserService 
     {
-        Task<List<User>> GetAllUsers();
-        Task<User> GetUserById(int id);
-        Task<List<User>> AddUser(User newUsers);
+        Task<ServiceResponse<List<User>>> GetAllUsers();
+        Task<ServiceResponse<User>> GetUserById(int id);
+        Task<ServiceResponse<List<User>>> AddUser(User newUsers);
         
     }
 }
