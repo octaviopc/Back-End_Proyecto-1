@@ -25,6 +25,17 @@ namespace Back_End.Controllers
             return Ok(await _userService.GetAllUsers());
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Delete(int id)
+        {
+            var response = await _userService.DeleteUser(id);
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
@@ -37,7 +48,7 @@ namespace Back_End.Controllers
             return Ok(await _userService.AddUser(newUser));
         }
 
-        [HttpPut]
+        [HttpPut("Update")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto updatedUser)
         {
             var response = await _userService.UpdateUser(updatedUser);

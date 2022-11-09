@@ -32,6 +32,25 @@ namespace Back_End.Services.UserService
             return serviceResponse;
         }
 
+        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
+        {
+            ServiceResponse<List<GetUserDto>> response = new ServiceResponse<List<GetUserDto>>();
+
+            try{
+
+            User user = users.First(c => c.UserId == id);
+            users.Remove(user);
+            response.Data = users.Select(c => _mapper.Map<GetUserDto>(c)).ToList();
+
+            }catch(Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
         public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
 
