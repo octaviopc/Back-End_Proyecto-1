@@ -36,5 +36,16 @@ namespace Back_End.Controllers
         {
             return Ok(await _userService.AddUser(newUser));
         }
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto updatedUser)
+        {
+            var response = await _userService.UpdateUser(updatedUser);
+            if(response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }

@@ -25,7 +25,9 @@ namespace Back_End.Services.UserService
         public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers)
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            users.Add(_mapper.Map<User>(newUsers));
+            User user = _mapper.Map<User>(newUsers);
+            user.UserId = users.Max(c => c.UserId) + 1;
+            users.Add(user);
             serviceResponse.Data= users.Select(c=>_mapper.Map<GetUserDto>(c)).ToList();
             return serviceResponse;
         }
@@ -43,6 +45,29 @@ namespace Back_End.Services.UserService
             var user = users.FirstOrDefault(c=>c.UserId ==id);
             serviceResponse.Data = _mapper.Map<GetUserDto>(user);
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
+        {
+            ServiceResponse<GetUserDto> response = new ServiceResponse<GetUserDto>();
+
+            try{
+            User user = users.FirstOrDefault(c => c.UserId == updatedUser.UserId);
+
+            user.Name = updatedUser.Name;
+            user.UserType = updatedUser.UserType;
+            user.Email = updatedUser.Email;
+            user.Phone = updatedUser.Phone;
+
+            response.Data = _mapper.Map<GetUserDto>(user);
+
+            }catch(Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
         }
     }
 }

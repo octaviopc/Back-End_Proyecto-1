@@ -11,6 +11,7 @@ namespace Back_End.Services.UserService
         Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
         Task<ServiceResponse<GetUserDto>> GetUserById(int id);
         Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers);
+        Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser);
         
     }
 }
