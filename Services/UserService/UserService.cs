@@ -3,32 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Back_End.Data;
 using Back_End.Dtos.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back_End.Services.UserService
 {
     public class UserService : IUserService
     {
-        private static List<User> users = new List<User>
-        {
-            new User {UserId=1, Name="Tavo"},
-            new User {UserId=2, Name="Daniel"}            
-        };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public UserService(IMapper mapper)
+        public UserService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
-            
+            _context = context;
         }
 
         public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers)
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
             User user = _mapper.Map<User>(newUsers);
-            user.UserId = users.Max(c => c.UserId) + 1;
-            users.Add(user);
-            serviceResponse.Data= users.Select(c=>_mapper.Map<GetUserDto>(c)).ToList();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Users
+                .Select(c => _mapper.Map<GetUserDto>(c))
+                .ToListAsync();
             return serviceResponse;
         }
 
@@ -36,13 +36,17 @@ namespace Back_End.Services.UserService
         {
             ServiceResponse<List<GetUserDto>> response = new ServiceResponse<List<GetUserDto>>();
 
-            try{
+            try
+            {
 
-            User user = users.First(c => c.UserId == id);
-            users.Remove(user);
-            response.Data = users.Select(c => _mapper.Map<GetUserDto>(c)).ToList();
+                User user = await _context.Users.FirstAsync(c => c.UserId == id);
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
 
-            }catch(Exception ex)
+                response.Data = _context.Users.Select(c => _mapper.Map<GetUserDto>(c)).ToList();
+
+            }
+            catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
@@ -53,16 +57,18 @@ namespace Back_End.Services.UserService
 
         public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
+            var response = new ServiceResponse<List<GetUserDto>>();
+            var dbUsers = await _context.Users.ToListAsync();
+            response.Data = dbUsers.Select(c => _mapper.Map<GetUserDto>(c)).ToList();
 
-            return new ServiceResponse<List<GetUserDto>>
-            {Data = users.Select(c=>_mapper.Map<GetUserDto>(c)).ToList()};
+            return response;
         }
 
         public async Task<ServiceResponse<GetUserDto>> GetUserById(int id)
         {
             var serviceResponse = new ServiceResponse<GetUserDto>();
-            var user = users.FirstOrDefault(c=>c.UserId ==id);
-            serviceResponse.Data = _mapper.Map<GetUserDto>(user);
+            var dbUser = await _context.Users.FirstOrDefaultAsync(c => c.UserId == id);
+            serviceResponse.Data = _mapper.Map<GetUserDto>(dbUser);
             return serviceResponse;
         }
 
@@ -70,17 +76,22 @@ namespace Back_End.Services.UserService
         {
             ServiceResponse<GetUserDto> response = new ServiceResponse<GetUserDto>();
 
-            try{
-            User user = users.FirstOrDefault(c => c.UserId == updatedUser.UserId);
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(c => c.UserId == updatedUser.UserId);
 
-            user.Name = updatedUser.Name;
-            user.UserType = updatedUser.UserType;
-            user.Email = updatedUser.Email;
-            user.Phone = updatedUser.Phone;
+                user.Name = updatedUser.Name;
+                user.UserType = updatedUser.UserType;
+                user.Email = updatedUser.Email;
+                user.Phone = updatedUser.Phone;
 
-            response.Data = _mapper.Map<GetUserDto>(user);
+                await _context.SaveChangesAsync();
 
-            }catch(Exception ex)
+                response.Data = _mapper.Map<GetUserDto>(user);
+
+            }
+            catch (Exception ex)
             {
                 response.Success = false;
                 response.Message = ex.Message;
