@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Back_End.Dtos.User;
 
 namespace Back_End.Services.UserService
 {
     public interface IUserService 
     {
-        Task<ServiceResponse<List<User>>> GetAllUsers();
-        Task<ServiceResponse<User>> GetUserById(int id);
-        Task<ServiceResponse<List<User>>> AddUser(User newUsers);
+        Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
+        Task<ServiceResponse<GetUserDto>> GetUserById(int id);
+        Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers);
         
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Back_End.Dtos.User;
 using Back_End.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,19 +20,19 @@ namespace Back_End.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Get()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<User>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
             return Ok(await _userService.GetUserById(id));
         }
         
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User newUser)
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> AddUser(AddUserDto newUser)
         {
             return Ok(await _userService.AddUser(newUser));
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Back_End.Dtos.User;
 
 namespace Back_End.Services.UserService
 {
@@ -13,23 +14,23 @@ namespace Back_End.Services.UserService
             new User {UserId=1, Name="Daniel"}            
         };
 
-        public async Task<ServiceResponse<List<User>>> AddUser(User newUsers)
+        public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers)
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
             users.Add(newUsers);
             serviceResponse.Data= users;
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
 
-            return new ServiceResponse<List<User>>{Data = users};
+            return new ServiceResponse<List<GetUserDto>>{Data = users};
         }
 
-        public async Task<ServiceResponse<User>> GetUserById(int id)
+        public async Task<ServiceResponse<GetUserDto>> GetUserById(int id)
         {
-            var serviceResponse = new ServiceResponse<User>();
+            var serviceResponse = new ServiceResponse<GetUserDto>();
             var user = users.FirstOrDefault(c=>c.UserId ==id);
             serviceResponse.Data = user;
             return serviceResponse;
