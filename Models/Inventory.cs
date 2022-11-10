@@ -11,6 +11,6 @@ namespace Back_End.Models
         public string Name { get; set; } = "Out of Stock";
         public string Description { get; set; } = "";
         public int Quantity { get; set; }
-        public User Users { get; set; }
+        public User? Users { get; set; }
     }
 }

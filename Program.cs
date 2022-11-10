@@ -1,5 +1,6 @@
 global using Back_End.Models;
 using Back_End.Data;
+using Back_End.Services.IventoryService;
 using Back_End.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 builder.Services.AddHttpContextAccessor();
 

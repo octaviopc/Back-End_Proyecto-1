@@ -44,7 +44,7 @@ namespace Back_End.Services.UserService
             try
             {
                 var user = await _context.Users
-                    .Include(c => c.Items)
+                    .Include(c => c.Inventories)
                     .FirstOrDefaultAsync(c => c.UserId == newUserItem.ItemID);
 
                 if (user == null)

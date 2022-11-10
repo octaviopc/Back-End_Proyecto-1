@@ -14,7 +14,7 @@ namespace Back_End.Models
         public UserType_enum UserType { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        public List<Inventory> Items { get; set; }
+        public List<Inventory>? Inventories { get; set; }
 
     }
 }

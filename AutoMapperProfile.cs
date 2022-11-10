@@ -15,6 +15,7 @@ namespace Back_End
             CreateMap<User, GetUserDto>();
             CreateMap<AddUserDto, User>();
             CreateMap<Inventory, GetInventoryDto>();
+            CreateMap<AddInventoryDto, Inventory>();
         }
 
     }
