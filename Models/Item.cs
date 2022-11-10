@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Back_End.Models
 {
-    public class Inventory
+    public class Item
     {
         public int Id { get; set; }
         public string Name { get; set; } = "Out of Stock";

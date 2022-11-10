@@ -16,7 +16,7 @@ namespace Back_End.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
-            
+
         }
 
         [HttpGet("GetAll")]
@@ -29,19 +29,19 @@ namespace Back_End.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> Delete(int id)
         {
             var response = await _userService.DeleteUser(id);
-            if(response.Data == null)
+            if (response.Data == null)
             {
                 return NotFound(response);
             }
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] //[HttpGet("{id}/{id2}/{id3}")]
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingle(int id)
         {
             return Ok(await _userService.GetUserById(id));
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> AddUser(AddUserDto newUser)
         {
@@ -52,7 +52,7 @@ namespace Back_End.Controllers
         public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto updatedUser)
         {
             var response = await _userService.UpdateUser(updatedUser);
-            if(response.Data == null)
+            if (response.Data == null)
             {
                 return NotFound(response);
             }

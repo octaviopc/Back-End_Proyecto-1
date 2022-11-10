@@ -9,11 +9,12 @@ namespace Back_End.Models
 {
     public class User
     {
-        public int UserId{get;set;}
-        public string Name { get; set; }=string.Empty;
+        public int UserId { get; set; }
+        public string Name { get; set; } = string.Empty;
         public UserType_enum UserType { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        
+        public List<Inventory> Items { get; set; }
+
     }
 }

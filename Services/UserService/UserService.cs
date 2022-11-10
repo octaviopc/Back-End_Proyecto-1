@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Back_End.Data;
@@ -13,12 +14,17 @@ namespace Back_End.Services.UserService
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IMapper mapper, DataContext context)
+        public UserService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
             _context = context;
         }
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User
+            .FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto newUsers)
         {
@@ -30,6 +36,30 @@ namespace Back_End.Services.UserService
                 .Select(c => _mapper.Map<GetUserDto>(c))
                 .ToListAsync();
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<List<GetUserDto>>> AddUserInventory(AddUserInventoryDto newUserItem)
+        {
+            var response = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var user = await _context.Users
+                    .Include(c => c.Items)
+                    .FirstOrDefaultAsync(c => c.UserId == newUserItem.ItemID);
+
+                if (user == null)
+                {
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
